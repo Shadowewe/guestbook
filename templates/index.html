@@ -2,20 +2,39 @@
 <html>
 <head>
     <title>Гостевая книга</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <h1>📖 Гостевая книга</h1>
     
     <h2>Сообщения</h2>
-    {% if messages %}
-        {% for msg in messages %}
-        <div>
-            <strong>{{ msg.name }}</strong> ({{ msg.created_at }})
-            <p>{{ msg.message }}</p>
+        
+        {% if messages %}
+            {% for msg in messages %}
+            <div class="message">
+                <strong>👤 {{ msg.name }}</strong> <small>(📅 {{ msg.created_at }})</small>
+                <p>{{ msg.message }}</p>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>Пока нет сообщений. Будьте первым!</p>
+        {% endif %}
+
+        {% if session.pop('success', False) %}
+            <div class="a">
+                Сообщение добавлено!
+            </div>
+        {% endif %}
+        
+        <div class="add-form">
+            <h2>Оставить сообщение</h2>
+            
+            <form method="POST" action="/add">
+                <input type="text" name="name" placeholder="Ваше имя" required>
+                <textarea name="message" placeholder="Ваше сообщение" rows="4" required></textarea>
+                <button type="submit">✉️ Отправить</button>
+            </form>
         </div>
-        {% endfor %}
-    {% else %}
-        <p>Пока нет сообщений.</p>
-    {% endif %}
+    </div>
 </body>
 </html>

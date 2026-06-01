@@ -1,48 +1,33 @@
-# Импортируем необходимые классы и функции из Flask
-# Flask - основной класс для создания веб-приложения
-# render_template - функция для отображения HTML-шаблонов
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, session
+from database import init_db, get_all_messages, add_message
 
-# Импортируем наши функции из файла database.py
-# init_db - создаёт таблицу в базе данных, если её нет
-# get_all_messages - получает все сообщения из базы данных
-from database import init_db, get_all_messages
-
-# Создаём экземпляр Flask-приложения
-# __name__ - специальная переменная Python, которая хранит имя текущего модуля
-# Flask использует её, чтобы найти папки templates и static
 app = Flask(__name__)
-
-# Инициализируем базу данных при запуске приложения
-# Вызываем функцию init_db(), которая создаёт таблицу messages, если её ещё нет
-# Это происходит один раз при старте сервера
 init_db()
 
-# Определяем маршрут (URL) для главной страницы
-# @app.route - это декоратор, который связывает URL с функцией ниже
-# '/' - означает корневой адрес сайта (например, http://127.0.0.1:5000/)
+
 @app.route('/')
 def index():
-    # Эта функция вызывается, когда пользователь открывает главную страницу
-    
-    # Получаем все сообщения из базы данных
-    # get_all_messages() возвращает список словарей или объектов Row
-    # Каждый элемент содержит поля: id, name, message, created_at
+    """Главная страница: показывает все сообщения."""
     messages = get_all_messages()
-    
-    # Отображаем HTML-шаблон и передаём в него данные
-    # render_template ищет файл в папке templates
-    # 'index.html' - имя файла шаблона
-    # messages=messages - передаём переменную messages в шаблон под тем же именем
-    # В шаблоне к ней можно обратиться как {{ messages }}
     return render_template('index.html', messages=messages)
 
-# Проверяем, запущен ли файл напрямую (а не импортирован как модуль)
-# __name__ == '__main__' означает "этот файл запущен, а не импортирован"
+
+@app.route('/add', methods=['POST'])
+def add():
+    """Обрабатывает отправку нового сообщения."""
+    # Получаем данные из формы
+    name = request.form.get('name', '').strip()
+    message = request.form.get('message', '').strip()
+    session['success'] = True
+    
+    # Проверяем, что оба поля не пустые
+    if name and message:
+        add_message(name, message)
+        session['success'] = True
+    
+    # Перенаправляем на главную страницу
+    return redirect('/')
+
+
 if __name__ == '__main__':
-    # Запускаем встроенный веб-сервер Flask
-    # debug=True включает режим отладки:
-    #   - сервер перезапускается при изменении кода
-    #   - при ошибке показывается подробный отчёт в браузере
-    #   - НЕ ИСПОЛЬЗОВАТЬ на реальных серверах (только для разработки)
     app.run(debug=True)

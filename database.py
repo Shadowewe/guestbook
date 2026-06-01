@@ -20,17 +20,6 @@ def init_db():
     ''')
     conn.commit()
     conn.close()
-    def add_test_messages():
-        conn = get_db_connection()
-        conn.execute(
-            'INSERT INTO messages (name, message, created_at) VALUES (?, ?, ?)',
-            ('Анна', 'Отличный сайт!', '2026-05-28')
-        )
-        conn.execute(
-            'INSERT INTO messages (name, message, created_at) VALUES (?, ?, ?)', ('Саша', 'Все работает', '2024-10-19')
-        )
-        conn.commit()
-        conn.close()
 
 def get_all_messages():
     conn = get_db_connection()
@@ -39,3 +28,27 @@ def get_all_messages():
     ).fetchall()
     conn.close()
     return messages
+
+def add_message(name, message):
+    """
+    Добавляет новое сообщение в базу данных.
+    Дата создания проставляется автоматически (текущая дата).
+    """
+    # Получаем соединение с базой данных
+    conn = get_db_connection()
+    
+    # Выполняем SQL-запрос на вставку данных
+    # INSERT INTO - добавляет новую строку в таблицу
+    # VALUES (?, ?, ?) - знаки вопроса это заполнители (placeholders)
+    # Вторым аргументом передаётся кортеж со значениями
+    # Знаки вопроса защищают от SQL-инъекций
+    conn.execute(
+        'INSERT INTO messages (name, message, created_at) VALUES (?, ?, ?)',
+        (name, message, date.today().strftime('%Y-%m-%d'))
+    )
+    
+    # Сохраняем изменения
+    conn.commit()
+    
+    # Закрываем соединение
+    conn.close()
