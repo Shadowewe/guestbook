@@ -5,6 +5,17 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <div class="auth-links">
+    {% if logged_in %}
+        {# Пользователь авторизован #}
+        Вы вошли как <strong>{{ username }}</strong> |
+        <a href="/logout">Выйти</a>
+    {% else %}
+        {# Пользователь не авторизован #}
+        <a href="/login">Войти</a> (админ: admin / 123)
+    {% endif %}
+</div>
+
     <h1>📖 Гостевая книга</h1>
     
     <h2>Сообщения</h2>
@@ -16,7 +27,9 @@
             {% for msg in messages %}
             <div class="message">
                 <strong>👤 {{ msg.name }}</strong> <small>(📅 {{ msg.created_at }})</small>
-                <a href="/delete/{{ msg.id }}" class="delete-btn" onclick="return confirm('Удалить сообщение?')">Удалить</a>
+                {% if logged_in %}
+                    <a href="/delete/{{ msg.id }}" class="delete-btn" onclick="return confirm('Удалить сообщение?')">Удалить</a>
+                {% endif %}
                 <p>{{ msg.message }}</p>
             </div>
             {% endfor %}
@@ -24,7 +37,9 @@
             <p>Пока нет сообщений. Будьте первым!</p>
         {% endif %}
 
-        <a href="/delete-all" class="b" onclick="return confirm('Удалить все сообщения?')">Удалить все</a>
+        {% if logged_in %}
+            <a href="/delete-all" class="b" onclick="return confirm('Удалить все сообщения?')">Удалить все</a>
+        {% endif %}
 
         {% if session.pop('success', False) %}
             <div class="a">
