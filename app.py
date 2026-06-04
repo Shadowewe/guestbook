@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, session
 from database import init_db, get_all_messages, add_message
 
 app = Flask(__name__)
+app.secret_key = 'arbuziki'
 init_db()
 
 
@@ -18,7 +19,6 @@ def add():
     # Получаем данные из формы
     name = request.form.get('name', '').strip()
     message = request.form.get('message', '').strip()
-    session['success'] = True
     
     # Проверяем, что оба поля не пустые
     if name and message:

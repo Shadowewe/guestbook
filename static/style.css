@@ -76,3 +76,16 @@ button:hover {
     color: yellowgreen;
     animation: fadeOut 3s forwards;
 }
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    70% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        display: none;
+    }
+}
