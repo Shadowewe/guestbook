@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Гостевая книга</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>📖 Удалить все сообщения?</h1>
+    
+    <form method="POST" action="/delete-all-confirm">
+        <button type="submit">Да, удалить всё</button>
+        <a href="/">Отмена</a>
+    </form>
+    
+</body>
+</html>
