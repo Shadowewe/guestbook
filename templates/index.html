@@ -24,7 +24,7 @@
             <p>Пока нет сообщений. Будьте первым!</p>
         {% endif %}
 
-        <a href="/delete-all" class="b">Удалить все</a>
+        <a href="/delete-all" class="b" onclick="return confirm('Удалить все сообщения?')">Удалить все</a>
 
         {% if session.pop('success', False) %}
             <div class="a">

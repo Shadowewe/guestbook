@@ -33,9 +33,10 @@ def delete(message_id):
     delete_message(message_id)
     return redirect('/')
 
-@app.route('/delete-all', methods=['GET'])
+@app.route('/delete-all', methods=['GET', 'POST'])
 def deleteall():
-    return render_template('delete_all.html')
+    delete_all()
+    return redirect('/')
 
 @app.route('/delete-all-confirm', methods=['POST'])
 def deleteallc():
