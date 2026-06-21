@@ -3,25 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>Вход в гостевую книгу</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <div class="container">
-        <h1>🔐 Вход в гостевую книгу</h1>
-        
-        {# Если есть ошибка — показываем её #}
-        {% if error %}
-            <p class="error">{{ error }}</p>
-        {% endif %}
-        
-        {# Форма отправляет данные методом POST на тот же адрес /login #}
-        <form method="POST">
-            <input type="text" name="username" placeholder="Логин" required>
-            <input type="password" name="password" placeholder="Пароль" required>
-            <button type="submit">Войти</button>
-        </form>
-        
-        <p><a href="/">← На главную</a></p>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                
+                <h1 class="text-center mb-4">🔐 Вход в гостевую книгу</h1>
+                
+                {# Задание 5: Уведомление об ошибке (alert и alert-danger) #}
+                {% if error %}
+                    <div class="alert alert-danger text-center">
+                        {{ error }}
+                    </div>
+                {% endif %}
+                
+                {# Форма отправляет данные методом POST на тот же адрес /login #}
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Логин</label>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Логин" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Пароль</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Пароль" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100">Войти</button>
+                </form>
+                
+                <p class="text-center mt-3">
+                    <a href="/" class="text-decoration-none">← На главную</a>
+                </p>
+                
+            </div>
+        </div>
     </div>
 </body>
 </html>
